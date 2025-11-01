@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { Link } from 'react-router-dom'; // Add this import
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -52,6 +53,16 @@ const AboutSection = () => {
               From residential teardowns to large-scale commercial demolitions, we've successfully completed hundreds of projects, 
               earning the trust of South Africa's leading construction companies and developers.
             </p>
+          </div>
+
+          {/* Add the Services Button */}
+          <div className="mt-12">
+            <Link 
+              to="/services"
+              className="inline-flex items-center px-8 py-4 text-lg font-semibold bg-gradient-to-r from-orange-500 to-yellow-500 text-white rounded-lg hover:from-orange-600 hover:to-yellow-600 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-orange-500/25"
+            >
+              View Our Services
+            </Link>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16">
