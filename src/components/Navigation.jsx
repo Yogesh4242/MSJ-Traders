@@ -47,7 +47,7 @@ const Navigation = () => {
             to="/"
             className="text-2xl font-bold tracking-tight bg-gradient-to-r from-yellow-500 to-orange-500 bg-clip-text text-transparent"
           >
-            MSJ TRADERS / Enhanzers
+            MSJ TRADERS
           </Link>
 
           {/* Desktop Navigation */}
