@@ -91,40 +91,39 @@ const Navigation = () => {
         </div>
 
         {/* Mobile Menu */}
-        <div
-          className={`md:hidden overflow-hidden transition-all duration-300 ${
-            isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
-          }`}
+       
+<div
+  className={`md:hidden overflow-hidden transition-all duration-300 ${
+    isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+  }`}
+>
+  <div className="py-4 space-y-2 border-t border-gray-700"> {/* Reduced space-y-4 to space-y-2 */}
+    {navLinks.map((link) => (
+      link.href.startsWith('#') ? (
+        <a
+          key={link.href}
+          href={link.href}
+          onClick={(e) => {
+            e.preventDefault();
+            scrollToSection(link.href);
+          }}
+          className="block text-gray-300 hover:text-orange-500 transition-colors duration-300 font-medium py-1 text-sm text-center" // Reduced py-2 to py-1, added text-sm
         >
-          <div className="py-4 space-y-4 border-t border-gray-700">
-            {navLinks.map((link) => (
-              link.href.startsWith('#') ? (
-                // Hash links for same page scrolling
-                <a
-                  key={link.href}
-                  href={link.href}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    scrollToSection(link.href);
-                  }}
-                  className="block text-gray-300 hover:text-orange-500 transition-colors duration-300 font-medium py-2 text-center"
-                >
-                  {link.label}
-                </a>
-              ) : (
-                // Page links for navigation
-                <Link
-                  key={link.href}
-                  to={link.href}
-                  onClick={() => setIsOpen(false)}
-                  className="block text-gray-300 hover:text-orange-500 transition-colors duration-300 font-medium py-2 text-center"
-                >
-                  {link.label}
-                </Link>
-              )
-            ))}
-          </div>
+          {link.label}
+        </a>
+      ) : (
+        <Link
+          key={link.href}
+          to={link.href}
+          onClick={() => setIsOpen(false)}
+          className="block text-gray-300 hover:text-orange-500 transition-colors duration-300 font-medium py-1 text-sm text-center" // Reduced py-2 to py-1, added text-sm
+        >
+          {link.label}
+          </Link>
+            )
+          ))}
         </div>
+      </div>
       </div>
     </nav>
   );

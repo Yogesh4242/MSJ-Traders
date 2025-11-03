@@ -49,7 +49,7 @@ const HeroSection = () => {
     >
 
       {/* Background Image with Overlay */}
-      <div className="absolute inset-0 z-0">
+      <div className="absolute inset-0 z-0 w-full">
         <img
           src={heroImage}
           alt="Professional demolition site"
@@ -59,14 +59,13 @@ const HeroSection = () => {
       </div>
 
       {/* Content */}
-      <div ref={contentRef} className="relative z-10 container mx-auto px-4 text-center">
-        <h1 className="hero-title text-5xl md:text-7xl font-bold mb-6 text-white ">
-
-                    Building the Future by
-             <span className="block bg-gradient-to-r from-orange-400 via-orange-500 to-yellow-400 bg-clip-text text-transparent mt-2 leading-tight">
-                    Dismantling the Past
-              </span>
-              
+      {/* Content */}
+      <div ref={contentRef} className="relative z-10 container mx-auto px-4 text-center w-full max-w-7xl">
+        <h1 className="hero-title text-4xl sm:text-5xl md:text-7xl font-bold mb-6 text-white break-words">
+          Building the Future by
+          <span className="block bg-gradient-to-r from-orange-400 via-orange-500 to-yellow-400 bg-clip-text text-transparent mt-2 leading-tight">
+            Dismantling the Past
+          </span>
         </h1>
         
         <p className="hero-subtitle text-xl md:text-2xl text-gray-200 mb-8 max-w-3xl mx-auto font-light">
