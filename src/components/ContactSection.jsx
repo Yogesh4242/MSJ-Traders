@@ -101,10 +101,10 @@ const ContactSection = () => {
             </div>
             <h3 className="text-xl font-semibold mb-2 text-foreground">Phone</h3>
             <a 
-              href="tel:+91930384910" 
+              href="tel:‪+919841040740‬" 
               className="text-foreground hover:text-primary transition-colors"
             >
-              +91 930384910
+              ‪+91 9841040740‬
             </a>
           </div>
 
@@ -114,10 +114,10 @@ const ContactSection = () => {
             </div>
             <h3 className="text-xl font-semibold mb-2 text-foreground">Email</h3>
             <a 
-              href="mailto:contact@msjtraders.com" 
+              href="mailto:mohideenmsj@gmail.com" 
               className="text-foreground hover:text-primary transition-colors"
             >
-              contact@msjtraders.com
+              mohideenmsj@gmail.com
             </a>
           </div>
 
@@ -127,8 +127,18 @@ const ContactSection = () => {
             </div>
             <h3 className="text-xl font-semibold mb-2 text-foreground">Location</h3>
             <p className="text-foreground">
-              India, Chennai
+              No.57/34, Perambur High Road,<br />
+              Jamaliya,<br />
+              Chennai - 600 012
             </p>
+  <a 
+  href="https://maps.google.com/?q=No.57/34, Perambur High Road, Jamaliya, Chennai - 600 012"
+  target="_blank"
+  rel="noopener noreferrer"
+  className="text-primary hover:text-orange-400 transition-colors text-sm mt-2 inline-block"
+>
+  View on Google Maps →
+</a>
           </div>
         </div>
 
@@ -224,7 +234,7 @@ const ContactSection = () => {
                     required
                     rows="4"
                     className="w-full px-3 py-2 bg-background border border-border rounded-lg text-foreground placeholder-gray-400 focus:outline-none focus:border-primary transition-colors resize-none"
-                    placeholder="Tell us about your project..."
+                    placeholder="Let us know about your demolition project - we'll provide a free quote and expert advice!"
                   />
                 </div>
 

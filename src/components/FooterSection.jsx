@@ -14,7 +14,7 @@ const Footer = () => {
               <span className="text-2xl font-bold text-gradient-gold">MSJ TRADERS</span>
             </div>
             <p className="text-muted-foreground leading-relaxed">
-              Professional demolition and site clearance services with over 20 years of industry excellence.
+              MSJ Traders is a leading contractor specializing in the demolition of  buildings, heavy concrete structures, multistory buildings, and commercial properties, handling all types of demolition work.
             </p>
           </div>
 
@@ -92,4 +92,4 @@ const Footer = () => {
   );
 };
 
-export default Footer;
+export default Footer;

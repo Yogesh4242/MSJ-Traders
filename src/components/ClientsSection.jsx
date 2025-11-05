@@ -2,6 +2,18 @@ import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Building2, X, MapPin, Calendar, Award } from 'lucide-react';
+import lntLogo from './assets/images/clients/lntlogo.png';
+import tatalogo from './assets/images/clients/tatalogo.png';
+import bnrlogo from './assets/images/clients/bnrlogo.png';
+import afconlogo from './assets/images/clients/afconslogo.png';
+import ujwala from './assets/images/clients/ujwalalogo.png';
+
+
+import lntCard from './assets/images/clients/lntcard1.png';
+import tatacard from './assets/images/clients/tatacard.png';
+import bnrcard from './assets/images/clients/bnrcard.png';
+import afconscard from './assets/images/clients/afconscard.jpg';
+import ujwalacard from './assets/images/clients/ujwalacard.jpg';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -10,11 +22,13 @@ const ClientsSection = () => {
   const topClientsRef = useRef(null);
   const [selectedClient, setSelectedClient] = useState(null);
 
-  // Top featured clients with detailed information
+  // Top featured clients with detailed information and logos
   const topClients = [
     { 
-      name: 'Aveng Group', 
+      name: 'L&T', 
       color: 'from-blue-500 to-blue-600',
+      logo: lntLogo,
+      headerImage: lntCard,
       description: 'A leading infrastructure and resources group with operations across Africa, Australia, and Southeast Asia.',
       projects: ['Mooikloof Mega City', 'Gautrain Rapid Rail', 'Medupi Power Station'],
       location: 'Johannesburg, South Africa',
@@ -22,8 +36,10 @@ const ClientsSection = () => {
       specialization: 'Large-scale Infrastructure & Mining'
     },
     { 
-      name: 'Murray & Roberts', 
+      name: 'TATA', 
       color: 'from-green-500 to-green-600',
+      logo: tatalogo, // Using L&T logo as fallback temporarily
+      headerImage: tatacard, // Using L&T header as fallback temporarily
       description: 'A multinational engineering and construction company with expertise in underground mining, oil and gas, and infrastructure.',
       projects: ['Bokpoort CSP Plant', 'Gauteng Freeway Improvement', 'Sasol Mining Operations'],
       location: 'Johannesburg, South Africa',
@@ -31,8 +47,10 @@ const ClientsSection = () => {
       specialization: 'Engineering & Construction'
     },
     { 
-      name: 'WBHO Construction', 
+      name: 'BNR', 
       color: 'from-red-500 to-red-600',
+      logo: bnrlogo, // Using L&T logo as fallback temporarily
+      headerImage: bnrcard, // Using L&T header as fallback temporarily
       description: 'One of the largest construction companies in South Africa with significant international presence in Australia and UK.',
       projects: ['Moses Mabhida Stadium', 'Gateway Theatre of Shopping', 'Pearl Qatar'],
       location: 'Johannesburg, South Africa',
@@ -40,8 +58,10 @@ const ClientsSection = () => {
       specialization: 'Building & Civil Engineering'
     },
     { 
-      name: 'Stefanutti Stocks', 
+      name: 'AFCONS', 
       color: 'from-purple-500 to-purple-600',
+      logo: afconlogo, // Using L&T logo as fallback temporarily
+      headerImage: afconscard , // Using L&T header as fallback temporarily
       description: 'A multi-disciplinary construction company offering services across building, civil engineering, and roads earthworks.',
       projects: ['King Shaka International Airport', 'Menlyn Maine Precinct', 'Durban Container Terminal'],
       location: 'Johannesburg, South Africa',
@@ -49,8 +69,10 @@ const ClientsSection = () => {
       specialization: 'Multi-disciplinary Construction'
     },
     { 
-      name: 'Group Five', 
+      name: 'UJWALA', 
       color: 'from-orange-500 to-orange-600',
+      logo: ujwala, // Using L&T logo as fallback temporarily
+      headerImage: ujwalacard, // Using L&T header as fallback temporarily
       description: 'A diversified construction, materials, and infrastructure investments group with operations across Africa.',
       projects: ['Kusile Power Station', 'Nelson Mandela Bridge', 'Mozal Aluminium Smelter'],
       location: 'Johannesburg, South Africa',
@@ -139,10 +161,8 @@ const ClientsSection = () => {
           Working with India's leading construction and development companies
         </p>
 
-    {/* Top Featured Clients */}
+        {/* Top Featured Clients */}
         <div className="mb-20">
-         {/* this is an empty div for allingment mb-20*/}
-          
           <div
             ref={topClientsRef}
             className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 max-w-7xl mx-auto"
@@ -154,8 +174,13 @@ const ClientsSection = () => {
                 onClick={() => setSelectedClient(client)}
               >
                 <div className="relative bg-card rounded-lg p-8 border-2 border-border hover:border-primary transition-all duration-300 hover-glow cursor-pointer h-full flex flex-col items-center justify-center text-center">
-                  <div className={`w-16 h-16 rounded-full bg-gradient-to-br ${client.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
-                    <Building2 className="w-8 h-8 text-white" />
+                  {/* Scale only the image, not the container */}
+                  <div className="logo-container bg-black rounded-lg mb-4 transition-all duration-300 shadow-sm overflow-hidden">
+                    <img 
+                      src={client.logo} 
+                      alt={`${client.name} logo`}
+                      className="logo-image group-hover:scale-110 transition-transform duration-300"
+                    />
                   </div>
                   <h4 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
                     {client.name}
@@ -167,8 +192,7 @@ const ClientsSection = () => {
               </div>
             ))}
           </div>
-          </div>
-       
+        </div>
 
         {/* Other Clients Grid */}
         <div>
@@ -181,11 +205,11 @@ const ClientsSection = () => {
                 key={client}
                 className="other-client-card group cursor-pointer"
               >
-              <div className="bg-card/50 backdrop-blur-sm rounded-lg p-6 border border-border hover:border-primary hover:bg-card transition-all duration-300 h-full flex items-center justify-center text-center hover:shadow-lg hover:shadow-primary/20 hover:scale-105">
-                <p className="text-sm font-medium text-foreground/80 group-hover:text-primary transition-colors">
-                  {client}
-                </p>
-              </div>
+                <div className="bg-card/50 backdrop-blur-sm rounded-lg p-6 border border-border hover:border-primary hover:bg-card transition-all duration-300 h-full flex items-center justify-center text-center hover:shadow-lg hover:shadow-primary/20 hover:scale-105">
+                  <p className="text-sm font-medium text-foreground/80 group-hover:text-primary transition-colors">
+                    {client}
+                  </p>
+                </div>
               </div>
             ))}
           </div>
@@ -196,21 +220,36 @@ const ClientsSection = () => {
       {selectedClient && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
           <div className="popup-content bg-card border-2 border-primary rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto animate-in fade-in-zoom-in">
-            {/* Header */}
-            <div className={`bg-gradient-to-r ${selectedClient.color} p-6 rounded-t-lg`}>
-              <div className="flex justify-between items-start">
+            {/* Header with Full Landscape Image */}
+            <div 
+              className="relative p-6 rounded-t-lg overflow-hidden min-h-[180px] flex items-end"
+              style={{
+                backgroundImage: `url('${selectedClient.headerImage}')`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat'
+              }}
+            >
+              {/* Dark overlay for better text readability */}
+              <div className="absolute inset-0 bg-black/40"></div>
+              
+              <div className="relative z-10 flex justify-between items-end w-full">
                 <div className="flex items-center space-x-4">
-                  <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
-                    <Building2 className="w-6 h-6 text-white" />
+                  <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm border border-white/30">
+                    <img 
+                      src={selectedClient.logo} 
+                      alt={`${selectedClient.name} logo`}
+                      className="w-8 h-8 object-contain"
+                    />
                   </div>
                   <div>
-                    <h3 className="text-2xl font-bold text-white">{selectedClient.name}</h3>
-                    <p className="text-white/90">{selectedClient.specialization}</p>
+                    <h3 className="text-2xl font-bold text-white drop-shadow-lg">{selectedClient.name}</h3>
+                    <p className="text-white/90 drop-shadow-md">{selectedClient.specialization}</p>
                   </div>
                 </div>
                 <button
                   onClick={() => setSelectedClient(null)}
-                  className="text-white hover:bg-white/20 p-2 rounded-full transition-colors"
+                  className="text-white hover:bg-white/20 p-2 rounded-full transition-colors backdrop-blur-sm border border-white/30"
                 >
                   <X className="w-6 h-6" />
                 </button>
