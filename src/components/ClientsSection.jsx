@@ -1,13 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Building2, X, MapPin, Calendar, Award } from 'lucide-react';
+import { Building2, X, MapPin, Calendar, Award, ChevronLeft, ChevronRight } from 'lucide-react';
 import lntLogo from './assets/images/clients/lntlogo.png';
 import tatalogo from './assets/images/clients/tatalogo.png';
-import bnrlogo from './assets/images/clients/bnrlogo.png';
+import bnrlogo from './assets/images/clients/bnrlogo1.png';
 import afconlogo from './assets/images/clients/afconslogo.png';
 import ujwala from './assets/images/clients/ujwalalogo.png';
-
 
 import lntCard from './assets/images/clients/lntcard1.png';
 import tatacard from './assets/images/clients/tatacard.png';
@@ -20,7 +19,10 @@ gsap.registerPlugin(ScrollTrigger);
 const ClientsSection = () => {
   const sectionRef = useRef(null);
   const topClientsRef = useRef(null);
+  const carouselRef = useRef(null);
   const [selectedClient, setSelectedClient] = useState(null);
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [isAnimating, setIsAnimating] = useState(false);
 
   // Top featured clients with detailed information and logos
   const topClients = [
@@ -38,8 +40,8 @@ const ClientsSection = () => {
     { 
       name: 'TATA', 
       color: 'from-green-500 to-green-600',
-      logo: tatalogo, // Using L&T logo as fallback temporarily
-      headerImage: tatacard, // Using L&T header as fallback temporarily
+      logo: tatalogo,
+      headerImage: tatacard,
       description: 'A multinational engineering and construction company with expertise in underground mining, oil and gas, and infrastructure.',
       projects: ['Bokpoort CSP Plant', 'Gauteng Freeway Improvement', 'Sasol Mining Operations'],
       location: 'Johannesburg, South Africa',
@@ -49,8 +51,8 @@ const ClientsSection = () => {
     { 
       name: 'BNR', 
       color: 'from-red-500 to-red-600',
-      logo: bnrlogo, // Using L&T logo as fallback temporarily
-      headerImage: bnrcard, // Using L&T header as fallback temporarily
+      logo: bnrlogo,
+      headerImage: bnrcard,
       description: 'One of the largest construction companies in South Africa with significant international presence in Australia and UK.',
       projects: ['Moses Mabhida Stadium', 'Gateway Theatre of Shopping', 'Pearl Qatar'],
       location: 'Johannesburg, South Africa',
@@ -60,8 +62,8 @@ const ClientsSection = () => {
     { 
       name: 'AFCONS', 
       color: 'from-purple-500 to-purple-600',
-      logo: afconlogo, // Using L&T logo as fallback temporarily
-      headerImage: afconscard , // Using L&T header as fallback temporarily
+      logo: afconlogo,
+      headerImage: afconscard,
       description: 'A multi-disciplinary construction company offering services across building, civil engineering, and roads earthworks.',
       projects: ['King Shaka International Airport', 'Menlyn Maine Precinct', 'Durban Container Terminal'],
       location: 'Johannesburg, South Africa',
@@ -71,8 +73,8 @@ const ClientsSection = () => {
     { 
       name: 'UJWALA', 
       color: 'from-orange-500 to-orange-600',
-      logo: ujwala, // Using L&T logo as fallback temporarily
-      headerImage: ujwalacard, // Using L&T header as fallback temporarily
+      logo: ujwala,
+      headerImage: ujwalacard,
       description: 'A diversified construction, materials, and infrastructure investments group with operations across Africa.',
       projects: ['Kusile Power Station', 'Nelson Mandela Bridge', 'Mozal Aluminium Smelter'],
       location: 'Johannesburg, South Africa',
@@ -90,6 +92,111 @@ const ClientsSection = () => {
     'Nyeleti Consulting', 'Umhlaba Consulting', 'NMC Construction', 'Tenza Holdings', 'BKS Projects',
   ];
 
+  // Carousel navigation with animation
+  const navigateSlide = (direction) => {
+    if (isAnimating) return;
+    
+    setIsAnimating(true);
+    const carousel = carouselRef.current;
+    
+    // Animate current slide out
+    gsap.to(carousel, {
+      x: direction === 'next' ? -50 : 50,
+      opacity: 0,
+      duration: 0.3,
+      ease: 'power2.out',
+      onComplete: () => {
+        // Update slide
+        setCurrentSlide((prev) => 
+          direction === 'next' 
+            ? (prev === topClients.length - 1 ? 0 : prev + 1)
+            : (prev === 0 ? topClients.length - 1 : prev - 1)
+        );
+        
+        // Reset position and animate in
+        gsap.set(carousel, { 
+          x: direction === 'next' ? 50 : -50,
+          opacity: 0 
+        });
+        
+        gsap.to(carousel, {
+          x: 0,
+          opacity: 1,
+          duration: 0.3,
+          ease: 'power2.out',
+          onComplete: () => setIsAnimating(false)
+        });
+      }
+    });
+  };
+
+  const nextSlide = () => navigateSlide('next');
+  const prevSlide = () => navigateSlide('prev');
+
+  // Swipe handling
+  useEffect(() => {
+    const carousel = carouselRef.current;
+    if (!carousel) return;
+
+    let startX = 0;
+    let currentX = 0;
+    let isSwiping = false;
+
+    const handleTouchStart = (e) => {
+      startX = e.touches[0].clientX;
+      isSwiping = true;
+    };
+
+    const handleTouchMove = (e) => {
+      if (!isSwiping) return;
+      currentX = e.touches[0].clientX;
+      const diff = startX - currentX;
+      
+      // Add slight movement while swiping
+      if (Math.abs(diff) > 10) {
+        gsap.to(carousel, {
+          x: -diff * 0.3,
+          duration: 0.1,
+          ease: 'power2.out'
+        });
+      }
+    };
+
+    const handleTouchEnd = (e) => {
+      if (!isSwiping) return;
+      isSwiping = false;
+      
+      const diff = startX - currentX;
+      const swipeThreshold = 50;
+      
+      // Reset position
+      gsap.to(carousel, {
+        x: 0,
+        duration: 0.2,
+        ease: 'power2.out'
+      });
+
+      // Handle swipe
+      if (Math.abs(diff) > swipeThreshold) {
+        if (diff > 0) {
+          nextSlide(); // Swipe left - next
+        } else {
+          prevSlide(); // Swipe right - previous
+        }
+      }
+    };
+
+    carousel.addEventListener('touchstart', handleTouchStart);
+    carousel.addEventListener('touchmove', handleTouchMove);
+    carousel.addEventListener('touchend', handleTouchEnd);
+
+    return () => {
+      carousel.removeEventListener('touchstart', handleTouchStart);
+      carousel.removeEventListener('touchmove', handleTouchMove);
+      carousel.removeEventListener('touchend', handleTouchEnd);
+    };
+  }, [currentSlide, isAnimating]);
+
   useEffect(() => {
     const ctx = gsap.context(() => {
       // Title animation
@@ -103,20 +210,36 @@ const ClientsSection = () => {
         },
       });
 
-      // Top clients diagonal reveal
-      gsap.from('.top-client-card', {
-        opacity: 0,
-        x: (index) => (index % 2 === 0 ? -80 : 80),
-        y: (index) => (index % 2 === 0 ? 40 : -40),
-        rotation: (index) => (index % 2 === 0 ? -5 : 5),
-        duration: 0.8,
-        stagger: 0.15,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: topClientsRef.current,
-          start: 'top 70%',
-        },
-      });
+      // Desktop animations
+      if (window.innerWidth >= 768) {
+        // Top clients diagonal reveal (desktop only)
+        gsap.from('.top-client-card', {
+          opacity: 0,
+          x: (index) => (index % 2 === 0 ? -80 : 80),
+          y: (index) => (index % 2 === 0 ? 40 : -40),
+          rotation: (index) => (index % 2 === 0 ? -5 : 5),
+          duration: 0.8,
+          stagger: 0.15,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: topClientsRef.current,
+            start: 'top 70%',
+          },
+        });
+      } else {
+        // Mobile animations - simpler fade up
+        gsap.from('.top-client-card', {
+          opacity: 0,
+          y: 40,
+          duration: 0.6,
+          stagger: 0.1,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: topClientsRef.current,
+            start: 'top 80%',
+          },
+        });
+      }
 
       // Other clients grid reveal
       gsap.from('.other-client-card', {
@@ -152,17 +275,17 @@ const ClientsSection = () => {
 
   return (
     <section id="clients" ref={sectionRef} className="section-padding bg-background relative">
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-4 md:px-6">
         {/* Section Title */}
-        <h2 className="clients-title text-4xl md:text-5xl font-bold text-center mb-4 text-gradient-gold">
+        <h2 className="clients-title text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-4 text-gradient-gold">
           Our Top Clients
         </h2>
-        <p className="text-center text-muted-foreground text-lg mb-16 max-w-2xl mx-auto">
+        <p className="text-center text-muted-foreground text-base md:text-lg mb-12 md:mb-16 max-w-2xl mx-auto">
           Working with India's leading construction and development companies
         </p>
 
-        {/* Top Featured Clients */}
-        <div className="mb-20">
+        {/* Top Featured Clients - Desktop Grid */}
+        <div className="mb-16 md:mb-20 hidden md:block">
           <div
             ref={topClientsRef}
             className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 max-w-7xl mx-auto"
@@ -173,15 +296,15 @@ const ClientsSection = () => {
                 className="top-client-card group"
                 onClick={() => setSelectedClient(client)}
               >
-                <div className="relative bg-card rounded-lg p-8 border-2 border-border hover:border-primary transition-all duration-300 hover-glow cursor-pointer h-full flex flex-col items-center justify-center text-center">
+                <div className="relative bg-card rounded-xl p-8 border-2 border-border hover:border-primary transition-all duration-300 hover-glow cursor-pointer h-full flex flex-col items-center justify-center text-center">
                   {/* Scale only the image, not the container */}
-                  <div className="logo-container bg-black rounded-lg mb-4 transition-all duration-300 shadow-sm overflow-hidden">
+                 <div className="logo-container bg-black rounded-lg mb-4 transition-all duration-300 shadow-sm overflow-hidden w-24 h-24">
                     <img 
-                      src={client.logo} 
-                      alt={`${client.name} logo`}
-                      className="logo-image group-hover:scale-110 transition-transform duration-300"
-                    />
-                  </div>
+                       src={client.logo} 
+                          alt={`${client.name} logo`}
+                             className="logo-image w-full h-full object-contain p-0 group-hover:scale-110 transition-transform duration-300"
+                                />
+                         </div>
                   <h4 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
                     {client.name}
                   </h4>
@@ -194,9 +317,121 @@ const ClientsSection = () => {
           </div>
         </div>
 
+        {/* Top Featured Clients - Mobile Carousel */}
+        <div className="mb-16 md:hidden">
+          <div className="relative px-2">
+            {/* Carousel Container */}
+            <div className="overflow-hidden rounded-2xl">
+              <div 
+                ref={carouselRef}
+                className="carousel-slide"
+              >
+                <div
+                  className="top-client-card bg-card rounded-2xl p-6 border-2 border-primary cursor-pointer h-full"
+                  onClick={() => setSelectedClient(topClients[currentSlide])}
+                >
+                  {/* Client Logo and Basic Info */}
+                  <div className="flex items-center space-x-4 mb-4">
+                    <div className="logo-container bg-black rounded-lg shadow-sm overflow-hidden w-16 h-16 flex-shrink-0">
+  <img 
+    src={topClients[currentSlide].logo} 
+    alt={`${topClients[currentSlide].name} logo`}
+    className="w-full h-full object-contain p-0"
+  />
+</div>
+                    <div className="text-left">
+                      <h4 className="text-xl font-bold text-foreground">
+                        {topClients[currentSlide].name}
+                      </h4>
+                      <p className="text-sm text-muted-foreground">
+                        {topClients[currentSlide].specialization}
+                      </p>
+                    </div>
+                  </div>
+                  
+                  {/* Short Description */}
+                  <p className="text-sm text-foreground/80 leading-relaxed mb-4 text-left">
+                    {topClients[currentSlide].description.substring(0, 100)}...
+                  </p>
+
+                  {/* Quick Stats */}
+                  <div className="grid grid-cols-2 gap-3 text-center">
+                    <div className="bg-muted/50 rounded-lg p-3">
+                      <Calendar className="w-4 h-4 text-primary mx-auto mb-1" />
+                      <p className="text-xs text-muted-foreground">Since</p>
+                      <p className="text-sm font-semibold text-foreground">
+                        {topClients[currentSlide].since}
+                      </p>
+                    </div>
+                    <div className="bg-muted/50 rounded-lg p-3">
+                      <MapPin className="w-4 h-4 text-primary mx-auto mb-1" />
+                      <p className="text-xs text-muted-foreground">Location</p>
+                      <p className="text-sm font-semibold text-foreground truncate">
+                        {topClients[currentSlide].location.split(',')[0]}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* View Details CTA */}
+                  <button className="w-full mt-4 bg-primary text-primary-foreground py-2 rounded-lg font-semibold text-sm hover:bg-primary/90 transition-colors">
+                    View Details
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Carousel Controls */}
+            <div className="flex justify-between items-center mt-4 px-4">
+              <button
+                onClick={prevSlide}
+                disabled={isAnimating}
+                className="bg-primary text-primary-foreground p-3 rounded-full hover:bg-primary/90 transition-colors shadow-lg disabled:opacity-50"
+              >
+                <ChevronLeft className="w-5 h-5" />
+              </button>
+              
+              {/* Dots Indicator */}
+              <div className="flex space-x-2">
+                {topClients.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => !isAnimating && setCurrentSlide(index)}
+                    className={`w-2 h-2 rounded-full transition-all ${
+                      index === currentSlide ? 'bg-primary w-6' : 'bg-muted-foreground/30'
+                    } ${isAnimating ? 'opacity-50' : ''}`}
+                    disabled={isAnimating}
+                  />
+                ))}
+              </div>
+
+              <button
+                onClick={nextSlide}
+                disabled={isAnimating}
+                className="bg-primary text-primary-foreground p-3 rounded-full hover:bg-primary/90 transition-colors shadow-lg disabled:opacity-50"
+              >
+                <ChevronRight className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Slide Counter */}
+            <div className="text-center mt-2">
+              <span className="text-sm text-muted-foreground">
+                {currentSlide + 1} / {topClients.length}
+              </span>
+            </div>
+
+            {/* Swipe Hint */}
+            <div className="text-center mt-2">
+              <span className="text-xs text-muted-foreground">
+                Swipe to navigate
+              </span>
+            </div>
+          </div>
+        </div>
+
         {/* Other Clients Grid */}
         <div>
-          <h3 className="text-2xl font-semibold text-center mb-12 text-foreground">
+          <h3 className="text-xl md:text-2xl font-semibold text-center mb-8 md:mb-12 text-foreground">
             Other Valued Clients
           </h3>
           <div className="other-clients-grid grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 max-w-7xl mx-auto">
