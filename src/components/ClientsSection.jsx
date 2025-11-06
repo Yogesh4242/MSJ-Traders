@@ -23,6 +23,7 @@ const ClientsSection = () => {
   const [selectedClient, setSelectedClient] = useState(null);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [isSwiping, setIsSwiping] = useState(false);
 
   // Top featured clients with detailed information and logos
   const topClients = [
@@ -133,69 +134,84 @@ const ClientsSection = () => {
   const nextSlide = () => navigateSlide('next');
   const prevSlide = () => navigateSlide('prev');
 
-  // Swipe handling
-  useEffect(() => {
-    const carousel = carouselRef.current;
-    if (!carousel) return;
+// Swipe handling
+useEffect(() => {
+  const carousel = carouselRef.current;
+  if (!carousel) return;
 
-    let startX = 0;
-    let currentX = 0;
-    let isSwiping = false;
+  let startX = 0;
+  let currentX = 0;
+  let isSwipingLocal = false;
+  let startTime = 0;
+  let hasMoved = false;
 
-    const handleTouchStart = (e) => {
-      startX = e.touches[0].clientX;
-      isSwiping = true;
-    };
+  const handleTouchStart = (e) => {
+    startX = e.touches[0].clientX;
+    startTime = Date.now();
+    isSwipingLocal = true;
+    hasMoved = false;
+    setIsSwiping(true);
+  };
 
-    const handleTouchMove = (e) => {
-      if (!isSwiping) return;
-      currentX = e.touches[0].clientX;
-      const diff = startX - currentX;
-      
-      // Add slight movement while swiping
-      if (Math.abs(diff) > 10) {
-        gsap.to(carousel, {
-          x: -diff * 0.3,
-          duration: 0.1,
-          ease: 'power2.out'
-        });
-      }
-    };
-
-    const handleTouchEnd = (e) => {
-      if (!isSwiping) return;
-      isSwiping = false;
-      
-      const diff = startX - currentX;
-      const swipeThreshold = 50;
-      
-      // Reset position
+  const handleTouchMove = (e) => {
+    if (!isSwipingLocal) return;
+    currentX = e.touches[0].clientX;
+    const diff = startX - currentX;
+    
+    // Only consider it a swipe if movement is significant
+    if (Math.abs(diff) > 15) {
+      hasMoved = true;
       gsap.to(carousel, {
-        x: 0,
-        duration: 0.2,
+        x: -diff * 0.3,
+        duration: 0.1,
         ease: 'power2.out'
       });
+    }
+  };
 
-      // Handle swipe
-      if (Math.abs(diff) > swipeThreshold) {
-        if (diff > 0) {
-          nextSlide(); // Swipe left - next
-        } else {
-          prevSlide(); // Swipe right - previous
-        }
+  const handleTouchEnd = (e) => {
+    if (!isSwipingLocal) return;
+    
+    const endTime = Date.now();
+    const timeDiff = endTime - startTime;
+    const diff = startX - currentX;
+    const swipeThreshold = 60; // Increased threshold
+    const tapTimeThreshold = 300; // Increased time threshold
+    
+    // Reset position
+    gsap.to(carousel, {
+      x: 0,
+      duration: 0.2,
+      ease: 'power2.out'
+    });
+
+    // Only navigate if it was a clear swipe gesture
+    if (hasMoved && Math.abs(diff) > swipeThreshold) {
+      if (diff > 0) {
+        nextSlide(); // Swipe left - next
+      } else {
+        prevSlide(); // Swipe right - previous
       }
-    };
+    } 
+    // Otherwise, if it was a quick tap with minimal movement, open details
+    else if (!hasMoved || (timeDiff < tapTimeThreshold && Math.abs(diff) < 30)) {
+      setSelectedClient(topClients[currentSlide]);
+    }
+    
+    isSwipingLocal = false;
+    setIsSwiping(false);
+  };
 
-    carousel.addEventListener('touchstart', handleTouchStart);
-    carousel.addEventListener('touchmove', handleTouchMove);
-    carousel.addEventListener('touchend', handleTouchEnd);
+  carousel.addEventListener('touchstart', handleTouchStart);
+  carousel.addEventListener('touchmove', handleTouchMove);
+  carousel.addEventListener('touchend', handleTouchEnd);
 
-    return () => {
-      carousel.removeEventListener('touchstart', handleTouchStart);
-      carousel.removeEventListener('touchmove', handleTouchMove);
-      carousel.removeEventListener('touchend', handleTouchEnd);
-    };
-  }, [currentSlide, isAnimating]);
+  return () => {
+    carousel.removeEventListener('touchstart', handleTouchStart);
+    carousel.removeEventListener('touchmove', handleTouchMove);
+    carousel.removeEventListener('touchend', handleTouchEnd);
+  };
+}, [currentSlide, isAnimating]);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -297,14 +313,13 @@ const ClientsSection = () => {
                 onClick={() => setSelectedClient(client)}
               >
                 <div className="relative bg-card rounded-xl p-8 border-2 border-border hover:border-primary transition-all duration-300 hover-glow cursor-pointer h-full flex flex-col items-center justify-center text-center">
-                  {/* Scale only the image, not the container */}
-                 <div className="logo-container bg-black rounded-lg mb-4 transition-all duration-300 shadow-sm overflow-hidden w-24 h-24">
+                  <div className="logo-container bg-black rounded-lg mb-4 transition-all duration-300 shadow-sm overflow-hidden w-24 h-24">
                     <img 
-                       src={client.logo} 
-                          alt={`${client.name} logo`}
-                             className="logo-image w-full h-full object-contain p-0 group-hover:scale-110 transition-transform duration-300"
-                                />
-                         </div>
+                      src={client.logo} 
+                      alt={`${client.name} logo`}
+                      className="logo-image w-full h-full object-contain p-0 group-hover:scale-110 transition-transform duration-300"
+                    />
+                  </div>
                   <h4 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
                     {client.name}
                   </h4>
@@ -328,17 +343,22 @@ const ClientsSection = () => {
               >
                 <div
                   className="top-client-card bg-card rounded-2xl p-6 border-2 border-primary cursor-pointer h-full"
-                  onClick={() => setSelectedClient(topClients[currentSlide])}
+                  onClick={(e) => {
+                    // Only open details if not swiping
+                    if (!isSwiping) {
+                      setSelectedClient(topClients[currentSlide]);
+                    }
+                  }}
                 >
                   {/* Client Logo and Basic Info */}
                   <div className="flex items-center space-x-4 mb-4">
                     <div className="logo-container bg-black rounded-lg shadow-sm overflow-hidden w-16 h-16 flex-shrink-0">
-  <img 
-    src={topClients[currentSlide].logo} 
-    alt={`${topClients[currentSlide].name} logo`}
-    className="w-full h-full object-contain p-0"
-  />
-</div>
+                      <img 
+                        src={topClients[currentSlide].logo} 
+                        alt={`${topClients[currentSlide].name} logo`}
+                        className="w-full h-full object-contain p-0"
+                      />
+                    </div>
                     <div className="text-left">
                       <h4 className="text-xl font-bold text-foreground">
                         {topClients[currentSlide].name}
@@ -373,7 +393,10 @@ const ClientsSection = () => {
                   </div>
 
                   {/* View Details CTA */}
-                  <button className="w-full mt-4 bg-primary text-primary-foreground py-2 rounded-lg font-semibold text-sm hover:bg-primary/90 transition-colors">
+                  <button 
+                    className="w-full mt-4 bg-primary text-primary-foreground py-2 rounded-lg font-semibold text-sm hover:bg-primary/90 transition-colors"
+                    onClick={() => setSelectedClient(topClients[currentSlide])}
+                  >
                     View Details
                   </button>
                 </div>
@@ -465,16 +488,15 @@ const ClientsSection = () => {
                 backgroundRepeat: 'no-repeat'
               }}
             >
-              {/* Dark overlay for better text readability */}
               <div className="absolute inset-0 bg-black/40"></div>
               
               <div className="relative z-10 flex justify-between items-end w-full">
                 <div className="flex items-center space-x-4">
-                  <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm border border-white/30">
+                  <div className="w-12 h-12 bg-black rounded-full flex items-center justify-center backdrop-blur-sm border border-white/30 overflow-hidden">
                     <img 
                       src={selectedClient.logo} 
                       alt={`${selectedClient.name} logo`}
-                      className="w-8 h-8 object-contain"
+                      className="w-10 h-10 object-contain p-0"
                     />
                   </div>
                   <div>
@@ -493,7 +515,6 @@ const ClientsSection = () => {
 
             {/* Body */}
             <div className="p-6 space-y-6">
-              {/* Description */}
               <div>
                 <h4 className="text-lg font-semibold text-foreground mb-3">About</h4>
                 <p className="text-muted-foreground leading-relaxed">
@@ -501,7 +522,6 @@ const ClientsSection = () => {
                 </p>
               </div>
 
-              {/* Company Details */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="flex items-center space-x-3">
                   <MapPin className="w-5 h-5 text-primary" />
@@ -519,7 +539,6 @@ const ClientsSection = () => {
                 </div>
               </div>
 
-              {/* Notable Projects */}
               <div>
                 <div className="flex items-center space-x-2 mb-3">
                   <Award className="w-5 h-5 text-primary" />
@@ -535,7 +554,6 @@ const ClientsSection = () => {
                 </ul>
               </div>
 
-              {/* Partnership Highlights */}
               <div className="bg-muted/50 rounded-lg p-4">
                 <h4 className="font-semibold text-foreground mb-2">Partnership Highlights</h4>
                 <ul className="text-sm text-muted-foreground space-y-1">
@@ -547,7 +565,6 @@ const ClientsSection = () => {
               </div>
             </div>
 
-            {/* Footer */}
             <div className="border-t border-border p-4 bg-muted/20">
               <div className="flex justify-between items-center">
                 <span className="text-sm text-muted-foreground">
