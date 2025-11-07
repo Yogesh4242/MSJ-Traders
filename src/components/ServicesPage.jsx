@@ -1,24 +1,20 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Building2, Hammer, Truck, Shield, Recycle, Award } from 'lucide-react';
+import { Building2, Hammer, Truck, Shield, Recycle, Award, Home } from 'lucide-react';
 import { Button } from './ui/button';
+import { useNavigate } from 'react-router-dom'; // Add this import
 
 gsap.registerPlugin(ScrollTrigger);
 
 const ServicesPage = () => {
   const sectionRef = useRef(null);
+  const navigate = useNavigate(); // Initialize navigate function
 
-
-const ServicesPage = () => {
   // Reset scroll to top when Services page loads
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-
-  // ... rest of your ServicesPage code
-};
-
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -61,9 +57,12 @@ const ServicesPage = () => {
     return () => ctx.revert();
   }, []);
 
-  // Main services data
+  // Function to navigate back to home
+  const goToHome = () => {
+    navigate('/');
+  };
 
-  
+  // Main services data
   const mainServices = [
     {
       icon: <Hammer className="w-12 h-12" />,
@@ -121,21 +120,32 @@ const ServicesPage = () => {
   return (
     <div className="py-20 min-h-screen bg-background">
       {/* Hero Section */}
-
-        {/* Content */}
-<div className="relative z-10 container mx-auto px-4 text-center">
-  <h1 className="services-title text-4xl md:text-6xl font-bold mb-4 text-white">
-    Professional Add a button
-    <span className="block bg-gradient-to-r from-orange-400 via-orange-500 to-yellow-400 bg-clip-text text-transparent mt-2">
-      Demolition Services
-    </span>
-  </h1>
   
-  <p className="text-xl md:text-2xl text-gray-200 mb-12 max-w-3xl mx-auto font-light leading-relaxed">
-    Comprehensive demolition solutions with 20 years of excellence, precision, and unmatched safety standards
-  </p>
-</div>
-      
+      {/* Back to Home Button - Added at the top */}
+      <div className="fixed top-5 left-5 z-50">
+        <Button
+          onClick={goToHome}
+          variant=""
+          className="flex items-center gap-2 hover:scale-105 transition-transform duration-300 bg-white/90 backdrop-blur-sm text-gray-900 hover:bg-white border border-gray-100/50 shadow-sm hover:shadow-md font-medium px-4 py-2.5 text-sm sm:px-6 sm:py-3 sm:text-base"
+        >
+          <Home className="w-4 h-4" />
+          Back to Home
+        </Button>
+      </div>
+
+      {/* Content */}
+      <div className="relative z-10 container mx-auto px-4 text-center">
+        <h1 className="services-title text-4xl md:text-6xl font-bold mb-4 text-white">
+          Professional
+          <span className="block bg-gradient-to-r from-orange-400 via-orange-500 to-yellow-400 bg-clip-text text-transparent mt-2">
+            Demolition Services
+          </span>
+        </h1>
+        
+        <p className="text-xl md:text-2xl text-gray-200 mb-12 max-w-3xl mx-auto font-light leading-relaxed">
+          Comprehensive demolition solutions with 20 years of excellence, precision, and unmatched safety standards
+        </p>
+      </div>
 
       {/* Main Services Section */}
       <section ref={sectionRef} className="section-padding bg-background">
@@ -143,7 +153,7 @@ const ServicesPage = () => {
           <h2 className="services-title text-4xl md:text-5xl font-bold text-center mb-4 text-gradient-gold">
             Our Core Services
           </h2>
-          <p className="text-center text-muted-foreground text-lg mb-16 max-w-2xl mx-auto">
+          <p className="text-center text-foreground text-lg mb-16 max-w-2xl mx-auto">
             Specialized demolition services tailored to meet the unique requirements of each project
           </p>
 
@@ -165,30 +175,30 @@ const ServicesPage = () => {
                     {service.title}
                   </h3>
                   
-                  <p className="text-muted-foreground mb-6 leading-relaxed">
+                  <p className="text-foreground mb-6 leading-relaxed">
                     {service.description}
                   </p>
 
-      {/* Features */}
-             <ul className="space-y-3 mb-8">
-              {service.features.map((feature, idx) => (
-                 <li key={idx} className="flex items-center space-x-3 text-foreground/80">
-                    <div className="w-2 h-2 bg-primary rounded-full"></div>
-                   <span>{feature}</span>
-                  </li>
-           ))}
-             </ul>
+                  {/* Features */}
+                  <ul className="space-y-3 mb-8">
+                    {service.features.map((feature, idx) => (
+                      <li key={idx} className="flex items-center space-x-3 text-foreground/80">
+                        <div className="w-2 h-2 bg-primary rounded-full"></div>
+                        <span>{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
 
                   {/* CTA Button */}
                   <div className="mt-auto">
-                  <Button 
-                    variant="" 
-                    className="w-full mt-8 hover:scale-105 transition-transform duration-300"
-                  >
-                    Learn More
-                  </Button>
+                    <Button 
+                      variant="" 
+                      className="w-full mt-8 hover:scale-105 transition-transform duration-300"
+                    >
+                      Learn More
+                    </Button>
+                  </div>
                 </div>
-              </div>
               </div>
             ))}
           </div>
@@ -211,7 +221,7 @@ const ServicesPage = () => {
                     <h4 className="text-lg font-semibold mb-3 text-foreground group-hover:text-primary transition-colors">
                       {service.title}
                     </h4>
-                    <p className="text-muted-foreground text-sm leading-relaxed">
+                    <p className="text-foreground text-sm leading-relaxed">
                       {service.description}
                     </p>
                   </div>
@@ -231,7 +241,7 @@ const ServicesPage = () => {
                   <div className="text-3xl md:text-4xl font-bold text-primary mb-2 group-hover:scale-110 transition-transform duration-300">
                     {stat.number}
                   </div>
-                  <p className="text-muted-foreground text-sm font-medium">
+                  <p className="text-foreground text-sm font-medium">
                     {stat.label}
                   </p>
                 </div>
@@ -253,12 +263,15 @@ const ServicesPage = () => {
               <p className="text-muted-foreground text-lg mb-8 max-w-2xl mx-auto">
                 Contact us today for a free consultation and competitive quote on your demolition project.
               </p>
-              <Button 
-                size="lg"
-                className="hover:scale-105 font-semibold px-8 py-6 text-lg bg-gradient-to-r from-orange-500 to-yellow-500 text-white border-0 hover:from-orange-600 hover:to-yellow-600"
-              >
-                Get Free Quote
-              </Button>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Button 
+                  size="lg"
+                  className="hover:scale-105 font-semibold px-8 py-6 text-lg bg-gradient-to-r from-orange-500 to-yellow-500 text-white border-0 hover:from-orange-600 hover:to-yellow-600"
+                >
+                  Get Free Quote
+                </Button>
+                
+              </div>
             </div>
           </div>
         </div>
