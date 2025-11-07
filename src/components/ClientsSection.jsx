@@ -86,11 +86,19 @@ const ClientsSection = () => {
 
   // Other clients grid
   const otherClients = [
-    'Basil Read', 'Raubex Group', 'Concor', 'Wilson Bayly', 'Grinaker-LTA',
-    'Liviero Group', 'Shaft Sinkers', 'Esor Construction', 'Haw & Inglis', 'Matomo Projects',
-    'Bombela Civils', 'Hlahatsi Group', 'Franki Africa', 'Esorfranki', 'Mzansi Civil',
-    'Civils 2000', 'Roadmac', 'KWV Construction', 'Umso Construction', 'Khato Civils',
-    'Nyeleti Consulting', 'Umhlaba Consulting', 'NMC Construction', 'Tenza Holdings', 'BKS Projects',
+   "RR TULASI",
+    "CASAGRAND",
+    "MAHARISHI",
+    "TN POLICE HOUSING COR",
+    "K.S. RAVIKUMAR (DIR)",
+    "SIVA -3 SITE (ACTOR)",
+    "VASANTH (DIR)",
+    "SV.SEGAR",
+    "DEVAGIYA TRADERS / NAGALUR",
+    "TIRUPATHI AFGANS",
+    "TTT",
+    "BASHEM",
+    "MURUGAPPA GROUP"
   ];
 
   // Carousel navigation with animation
