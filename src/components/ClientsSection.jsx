@@ -166,63 +166,51 @@ const AFCONSBody = ({ client }) => (
           <p className="text-purple-300">4,50,000 Sq.ft Development</p>
         </div>
         <div className="text-right">
-          <h4 className="text-lg font-semibold text-white">Hyderabad</h4>
-          <p className="text-purple-300">Primary Location</p>
+          <h4 className="text-lg font-semibold text-white">Tirupati</h4>
+          <p className="text-purple-300">Andhra Pradesh</p>
         </div>
       </div>
     </div>
 
     <div className="bg-gradient-to-r from-gray-900 to-gray-800 rounded-lg p-4 border border-purple-500/20 shadow-2xl">
-      <h4 className="font-semibold text-white mb-4 text-purple-300 text-center">Mega Infrastructure Project</h4>
+      <h4 className="font-bold text-white mb-4 text-purple-300 text-center">Project Details</h4>
       
       <div className="space-y-4">
-        <div className="text-center">
-          <h5 className="font-medium text-white mb-2">Phase 1: Foundation</h5>
-          <p className="text-gray-300 text-sm">Deep excavation and piling work completed</p>
-        </div>
-        
-        <div className="text-center">
-          <h5 className="font-medium text-white mb-2">Phase 2: Structure</h5>
-          <p className="text-gray-300 text-sm">High-rise construction in progress</p>
-        </div>
-        
-        <div className="text-center">
-          <h5 className="font-medium text-white mb-2">Phase 3: Finishing</h5>
-          <p className="text-gray-300 text-sm">Interior and exterior work scheduled</p>
-        </div>
-      </div>
-    </div>
+        <div className ="">
+          <h5 className="font-medium text-white mb-2">Tirumala Tirupati Devasthanam:</h5>
+          <p className="text-gray-300 text-sm">Project - 1
+     • tirumalai tirupati tevasthanam 
+       Square feet : 
+       Time period : 
+       Date : 
+       Location : tirupati 
+Project - 2
+     • tirupati 
+       Square feet : 
+       Time period : 
+       Date : 
+       Location : tirupati 
 
-    <div className="grid grid-cols-3 gap-4 text-center">
-      <div className="bg-purple-900/30 rounded-lg p-3 border border-purple-500/20">
-        <p className="text-white font-bold text-lg">18</p>
-        <p className="text-purple-300 text-xs">Months</p>
-      </div>
-      <div className="bg-purple-900/30 rounded-lg p-3 border border-purple-500/20">
-        <p className="text-white font-bold text-lg">500+</p>
-        <p className="text-purple-300 text-xs">Workers</p>
-      </div>
-      <div className="bg-purple-900/30 rounded-lg p-3 border border-purple-500/20">
-        <p className="text-white font-bold text-lg">95%</p>
-        <p className="text-purple-300 text-xs">On Time</p>
+
+</p>
+
+//repeat this div to make points ---- details needed -----
+        </div>
       </div>
     </div>
+    
   </div>
 );
 
 const UJWALABody = ({ client }) => (
   <div className="p-6 space-y-6">
     <div className="bg-gradient-to-r from-orange-900/50 to-orange-800/50 rounded-lg p-4 border border-orange-500/30 shadow-2xl">
-      <h4 className="text-xl font-bold text-white text-center mb-2">Affordable Housing Project</h4>
-      <div className="flex justify-between">
+        <div className="flex justify-between">
         <div className="text-center">
           <p className="text-orange-300 text-sm">Area</p>
           <p className="text-white font-semibold">1,50,000 Sq.ft</p>
         </div>
-        <div className="text-center">
-          <p className="text-orange-300 text-sm">Units</p>
-          <p className="text-white font-semibold">200+ Homes</p>
-        </div>
+       
         <div className="text-center">
           <p className="text-orange-300 text-sm">Location</p>
           <p className="text-white font-semibold">Chennai</p>
@@ -232,42 +220,28 @@ const UJWALABody = ({ client }) => (
 
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       <div className="bg-gradient-to-r from-gray-900 to-gray-800 rounded-lg p-4 border border-orange-500/20 shadow-2xl">
-        <h4 className="font-semibold text-white mb-3 text-orange-300">Community Features</h4>
+        <h4 className="font-semibold text-white mb-3 text-orange-300">VR Chennai</h4>
         <ul className="text-sm text-gray-300 space-y-2">
-          <li>• Children's play area</li>
-          <li>• Community hall</li>
-          <li>• Green spaces</li>
-          <li>• Rainwater harvesting</li>
+          <li>• ---Type of building---</li>
+          <li>• Square feet : ------</li>
+          <li>• location: chennai</li>
+          <li>• ---time period ---</li>
         </ul>
       </div>
       
       <div className="bg-gradient-to-r from-gray-900 to-gray-800 rounded-lg p-4 border border-orange-500/20 shadow-2xl">
-        <h4 className="font-semibold text-white mb-3 text-orange-300">Amenities</h4>
+        <h4 className="font-semibold text-white mb-3 text-orange-300">Music College</h4>
         <ul className="text-sm text-gray-300 space-y-2">
-          <li>• 24/7 water supply</li>
-          <li>• Solar street lighting</li>
-          <li>• Waste management</li>
-          <li>• Security systems</li>
+          <li>• ---Type of building---</li>
+          <li>• Square feet : 40,000</li>
+          <li>• location tirupathi</li>
+          <li>• ---time period ---</li>
         </ul>
       </div>
     </div>
 
-    <div className="bg-orange-900/30 rounded-lg p-4 border border-orange-500/20">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-3">
-          <Calendar className="w-5 h-5 text-orange-400" />
-          <div>
-            <p className="text-sm text-orange-300">Partnership</p>
-            <p className="font-medium text-white">{client.since} - Present</p>
-          </div>
-        </div>
-        <div className="text-right">
-          <p className="text-sm text-orange-300">Social Impact</p>
-          <p className="font-medium text-white">200+ Families</p>
-        </div>
-      </div>
+    
     </div>
-  </div>
 );
 
 // Client Body Mapper
