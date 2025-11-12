@@ -254,23 +254,20 @@ const ServicesPage = () => {
         </Button>
       </div>
 
-      {/* Our Work Section - Same background as Our Core Services */}
-      <section className="pt-16 pb-16 bg-background">
+      {/* Our Work Section - Reduced bottom padding */}
+      <section className="pt-16 pb-12 bg-background">
         <div className="container mx-auto px-4">
           {/* Section Title */}
-          <h2 className="our-work-title text-4xl md:text-5xl font-bold text-center mb-4 text-gradient-gold">
+          <h2 className="our-work-title text-4xl md:text-5xl font-bold text-center mb-8 text-gradient-gold">
             OUR WORK
           </h2>
-          <p className="text-center text-foreground text-lg mb-8 max-w-2xl mx-auto">
-            Witness our expertise in action through our project portfolio
-          </p>
-
+         
           {/* Slider Container - Reduced size */}
-          <div className="slider-container relative max-w-4xl mx-auto">
+          <div className="slider-container relative max-w-5xl mx-auto">
             {/* Main Slider - Smaller size */}
             <div className="relative bg-card/20 backdrop-blur-sm rounded-2xl overflow-hidden border-2 border-border shadow-2xl">
               {/* Media Display - Reduced height */}
-              <div className="relative aspect-video w-full max-h-[400px]">
+              <div className="relative aspect-video w-full max-h-[500px]">
                 {ourWorkMedia[currentSlide].type === 'image' ? (
                   <img
                     src={ourWorkMedia[currentSlide].src}
@@ -340,10 +337,10 @@ const ServicesPage = () => {
         </div>
       </section>
 
-      {/* Main Services Section - Directly after Our Work */}
-      <section ref={sectionRef} className="section-padding bg-background">
+      {/* Main Services Section - Reduced top spacing */}
+      <section ref={sectionRef} className="pt-0 pb-16 bg-background">
         <div className="container mx-auto px-4">
-          <h2 className="services-title text-4xl md:text-5xl font-bold text-center mb-16 text-gradient-gold">
+          <h2 className="services-title text-4xl md:text-5xl font-bold text-center mb-12 text-gradient-gold">
             Our Core Services
           </h2>
 
@@ -621,6 +618,7 @@ const ServicesPage = () => {
           </div>
         </div>
       </section>
+
       {/* Footer Section */}
       <footer className="bg-background py-8">
         <div className="container mx-auto px-4">
