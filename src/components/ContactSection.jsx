@@ -79,7 +79,7 @@ Message: ${message || '-'}
 };
 
   return (
-    <section id="contact" className="section-padding bg-gradient-dark">
+    <section id="contact" className=" pb-20 bg-gradient-dark">
       <div className="container mx-auto px-4">
         <div className="contact-content max-w-4xl mx-auto text-center mb-12">
           <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gradient-gold">

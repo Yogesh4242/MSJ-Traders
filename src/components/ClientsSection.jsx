@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState,useMemo } from 'react';
 
 import { Building2, X, MapPin, Calendar, Award, ChevronLeft, ChevronRight } from 'lucide-react';
 
@@ -367,7 +367,116 @@ const MarqueeClient = ({ client, index }) => (
   </div>
 );
 
+const MarqueeRow = React.memo(
+  ({ clients, direction = "left", duration = 30, gradientWidth = "w-20" }) => (
+    <div className="marquee-row relative overflow-hidden mb-4">
+      <div
+        className={`absolute left-0 top-0 bottom-0 ${gradientWidth} bg-gradient-to-r from-background to-transparent z-10 pointer-events-none`}
+      />
+      <div
+        className={`absolute right-0 top-0 bottom-0 ${gradientWidth} bg-gradient-to-l from-background to-transparent z-10 pointer-events-none`}
+      />
+
+      <div
+        className={`marquee-track ${
+          direction === "right" ? "marquee-track--right" : ""
+        }`}
+        style={{ "--marquee-duration": `${duration}s` }}
+      >
+        <div className="marquee-inner">
+          {clients.map((client, index) => (
+            <MarqueeClient key={`a-${index}`} client={client} />
+          ))}
+        </div>
+
+        <div className="marquee-inner" aria-hidden="true">
+          {clients.map((client, index) => (
+            <MarqueeClient key={`b-${index}`} client={client} />
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+);
+
+
+  // Desktop Marquee Component
+const DesktopMarquee = React.memo(({ clients }) => {
+  const half = Math.ceil(clients.length / 2);
+  const firstHalf = clients.slice(0, half);
+  const secondHalf = clients.slice(half);
+
+  const desktopRow1Clients = [...firstHalf, ...firstHalf, ...firstHalf];
+  const desktopRow2Clients = [...secondHalf, ...secondHalf, ...secondHalf];
+  return (
+    <div className="marquee-container">
+      <h3 className="text-xl md:text-2xl font-semibold text-center mb-8 md:mb-12 text-foreground">
+        Other Valued Clients
+      </h3>
+      
+      <div className="marquee-row relative overflow-hidden mb-6">
+        <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
+        
+        <div className="flex animate-marquee-left">
+          {desktopRow1Clients.map((client, index) => (
+            <MarqueeClient key={`desktop-left-${index}`} client={client} index={index} />
+          ))}
+        </div>
+      </div>
+
+      <div className="marquee-row relative overflow-hidden">
+        <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
+        
+        <div className="flex animate-marquee-right">
+          {desktopRow2Clients.map((client, index) => (
+            <MarqueeClient key={`desktop-right-${index}`} client={client} index={index} />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+});
+
+// Mobile Marquee Component
+const MobileMarquee = React.memo(({ clients }) => {
+  const { row1, row2 } = React.useMemo(() => {
+    const half = Math.ceil(clients.length / 2);
+    return {
+      row1: clients.slice(0, half),
+      row2: clients.slice(half),
+    };
+  }, [clients]);
+
+  return (
+    <div className="marquee-container">
+      <h3 className="text-xl font-semibold text-center mb-8 text-foreground">
+        Other Valued Clients
+      </h3>
+
+      <MarqueeRow
+        clients={row1}
+        direction="left"
+        duration={20}
+        gradientWidth="w-8"
+      />
+      <MarqueeRow
+        clients={row2}
+        direction="right"
+        duration={20}
+        gradientWidth="w-8"
+      />
+    </div>
+  );
+});
+
+
+
 const ClientsSection = () => {
+
+
+  
   const sectionRef = useRef(null);
   const topClientsRef = useRef(null);
   const carouselRef = useRef(null);
@@ -466,103 +575,6 @@ const ClientsSection = () => {
     "BASHEM",
     "MURUGAPPA GROUP"
   ];
-
-
-  const MarqueeRow = ({ clients, direction = "left", duration = 30, gradientWidth = "w-20" }) => (
-  <div className="marquee-row relative overflow-hidden mb-4">
-    {/* side fades */}
-    <div className={`absolute left-0 top-0 bottom-0 ${gradientWidth} bg-gradient-to-r from-background to-transparent z-10 pointer-events-none`} />
-    <div className={`absolute right-0 top-0 bottom-0 ${gradientWidth} bg-gradient-to-l from-background to-transparent z-10 pointer-events-none`} />
-
-    <div
-      className={`marquee-track ${direction === "right" ? "marquee-track--right" : ""}`}
-      style={{ "--marquee-duration": `${duration}s` }}
-    >
-      {/* first copy */}
-      <div className="marquee-inner">
-        {clients.map((client, index) => (
-          <MarqueeClient key={`row-${direction}-a-${index}`} client={client} />
-        ))}
-      </div>
-
-      {/* second copy */}
-      <div className="marquee-inner" aria-hidden="true">
-        {clients.map((client, index) => (
-          <MarqueeClient key={`row-${direction}-b-${index}`} client={client} />
-        ))}
-      </div>
-    </div>
-  </div>
-);
-
-
-  // Desktop Marquee Component
-const DesktopMarquee = () => {
-  const half = Math.ceil(otherClients.length / 2);
-  const firstHalf = otherClients.slice(0, half);
-  const secondHalf = otherClients.slice(half);
-  
-  const desktopRow1Clients = [...firstHalf, ...firstHalf, ...firstHalf];
-  const desktopRow2Clients = [...secondHalf, ...secondHalf, ...secondHalf];
-
-  return (
-    <div className="marquee-container">
-      <h3 className="text-xl md:text-2xl font-semibold text-center mb-8 md:mb-12 text-foreground">
-        Other Valued Clients
-      </h3>
-      
-      <div className="marquee-row relative overflow-hidden mb-6">
-        <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
-        <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
-        
-        <div className="flex animate-marquee-left">
-          {desktopRow1Clients.map((client, index) => (
-            <MarqueeClient key={`desktop-left-${index}`} client={client} index={index} />
-          ))}
-        </div>
-      </div>
-
-      <div className="marquee-row relative overflow-hidden">
-        <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
-        <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
-        
-        <div className="flex animate-marquee-right">
-          {desktopRow2Clients.map((client, index) => (
-            <MarqueeClient key={`desktop-right-${index}`} client={client} index={index} />
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// Mobile Marquee Component
-const MobileMarquee = () => {
-  const half = Math.ceil(otherClients.length / 2);
-  const row1 = otherClients.slice(0, half);
-  const row2 = otherClients.slice(half);
-
-  return (
-    <div className="marquee-container">
-      <h3 className="text-xl md:text-2xl font-semibold text-center mb-8 text-foreground">
-        Other Valued Clients
-      </h3>
-
-      <MarqueeRow
-        clients={row1}
-        direction="left"
-        duration={20}    // faster on mobile
-        gradientWidth="w-8"
-      />
-      <MarqueeRow
-        clients={row2}
-        direction="right"
-        duration={20}
-        gradientWidth="w-8"
-      />
-    </div>
-  );
-};
 
 
   // Carousel navigation
@@ -749,6 +761,7 @@ useEffect(() => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [selectedClient]);
 
+  
   return (
     <section id="clients" ref={sectionRef} className="pt-20 bg-background relative">
       <div className="container mx-auto px-4 md:px-6">
@@ -911,11 +924,12 @@ useEffect(() => {
 
         {/* Other Clients - Different for Mobile and Desktop */}
         <div className="hidden md:block">
-          <DesktopMarquee  />
-        </div>
-        <div className="md:hidden">
-          <MobileMarquee />
-        </div>
+  <DesktopMarquee clients={otherClients} />
+</div>
+
+<div className="md:hidden">
+  <MobileMarquee clients={otherClients} />
+</div>
       </div>
 
       {/* Popup Modal */}
@@ -976,7 +990,7 @@ useEffect(() => {
       )}
 
       {/* CSS animations for marquee */}
-      <style jsx>{`
+      <style>{`
       
 
 
@@ -1013,9 +1027,7 @@ useEffect(() => {
         
         .animate-marquee-left:hover,
         .animate-marquee-right:hover,
-         {
-          animation-play-state: paused;
-        }
+       
       `}</style>
     </section>
   );

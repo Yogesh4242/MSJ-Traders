@@ -6,6 +6,7 @@ import Navigation from './components/Navigation';
 import HeroSection from './components/HeroSection';
 import About from './components/AboutSection';
 import Clients from './components/ClientsSection';
+import ServiceSection from "./components/ServiceSection";
 import Contact from './components/ContactSection';
 import Footer from './components/FooterSection';
 import ServicesPage from './components/ServicesPage';
@@ -21,6 +22,7 @@ const AppContent = () => (
     <HeroSection />
     <About />
     <Clients />
+    <ServiceSection/>
     <Contact />
     <Footer />
     <Whatsappbutton/>

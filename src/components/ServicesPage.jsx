@@ -376,7 +376,7 @@ const [isSubmitting, setIsSubmitting] = useState(false);
       gradient: 'from-purple-500 to-pink-500'
     },
     {
-      title: 'Renovation Demolition',
+      title: 'Renovation & Remodeling',
       icon: <RotateCcw className="w-6 h-6 md:w-8 md:h-8" />,
       description: 'Selective demolition for renovation projects, preserving structural elements while removing unwanted sections.',
       features: [
