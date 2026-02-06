@@ -17,7 +17,6 @@ import './globals.css';
 /* 🧠 Main Home Page Layout (Shared for SSR & CSR) */
 const AppContent = () => (
   <>
-    <SnowEffect/>
     <Navigation />
     <HeroSection />
     <About />
@@ -39,7 +38,6 @@ const App = () => {
     <Router>
       {/* 🔹 Only run ScrollToTop in Browser (no window/document on SSR) */}
       {typeof window !== 'undefined' && <ScrollToTop />}
-        <SnowEffect/>
         <Whatsappbutton />
       <Routes>
         <Route path="/" element={<AppContent />} />
